@@ -1,6 +1,7 @@
 public class Main {
     public static void main(String[] args){
-        System.out.println("Welcome to my Mess Attendance System");
+        System.out.println("Backend setup is working");
     }
 
 }
+
