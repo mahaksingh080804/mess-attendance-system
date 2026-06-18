@@ -1,9 +1,6 @@
 package studentregistrationmodule;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import java.sql.*;
 
 public class StudentOperation {
 
@@ -14,7 +11,7 @@ public class StudentOperation {
                 Connection con=DriverManager.getConnection(
                         "jdbc:mysql://localhost:3306/mess_food_waste_predictor",
                         "root",
-                        "your_password"
+                        "password"
                 );
                 PreparedStatement ps=con.prepareStatement(sql);
                 ){
@@ -38,7 +35,7 @@ public class StudentOperation {
                 Connection con = DriverManager.getConnection(
                         "jdbc:mysql://localhost:3306/mess_food_waste_predictor",
                         "root",
-                        "your_password"
+                        "password"
                 );
                 PreparedStatement ps = con.prepareStatement(sql);
 
@@ -54,6 +51,39 @@ public class StudentOperation {
         } catch (Exception e) {
             e.printStackTrace();
             return 0;
+        }
+    }
+
+
+    public boolean login(String email,String password) {
+        String sql =
+                "SELECT * FROM Student WHERE email=?";
+        try (
+                Connection con = DriverManager.getConnection(
+                        "jdbc:mysql://localhost:3306/mess_food_waste_predictor",
+                        "root",
+                        "password"
+                );
+                PreparedStatement ps = con.prepareStatement(sql);
+        ) {
+            ps.setString(1, email);
+
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+
+                String storedPassword = rs.getString("password");
+
+                if (storedPassword.equals(password)) {
+                    return true;
+                }
+                return false;
+            }
+            return false;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
         }
     }
 }
