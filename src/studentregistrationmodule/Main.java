@@ -72,11 +72,13 @@ public class Main {
                     break;
                 }
 
-               boolean isLoggedIn = studentOperation.login(loginEmail,loginPassword);
+               Student loggedInStudent = studentOperation.login(loginEmail,loginPassword);
 
-                if (isLoggedIn) {
+                if (loggedInStudent != null) {
                     System.out.println("Login Successful.");
-                } else {
+                    System.out.println("Welcome " + loggedInStudent.getStudentName());
+                }
+                else {
                     System.out.println("Invalid Email or Password.");
                 }
                 break;

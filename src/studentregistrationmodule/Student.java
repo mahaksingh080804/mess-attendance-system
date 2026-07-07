@@ -13,6 +13,13 @@ public class Student {
         this.password = password;
     }
 
+    public Student(int studentId, String studentName, String email, String password) {
+        this.studentId=studentId;
+        this.studentName = studentName;
+        this.email = email;
+        this.password = password;
+    }
+
     public int getStudentId(){
         return studentId;
     }

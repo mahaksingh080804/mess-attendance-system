@@ -55,9 +55,10 @@ public class StudentOperation {
     }
 
 
-    public boolean login(String email,String password) {
+    public Student login(String email,String password) {
         String sql =
-                "SELECT * FROM Student WHERE email=?";
+                "SELECT student_id, student_name, email, password FROM Student WHERE email = ?";
+
         try (
                 Connection con = DriverManager.getConnection(
                         "jdbc:mysql://localhost:3306/mess_food_waste_predictor",
@@ -72,18 +73,30 @@ public class StudentOperation {
 
             if (rs.next()) {
 
+                int studentId = rs.getInt("student_id");
+
+                String studentName = rs.getString("student_name");
+
+                String studentEmail = rs.getString("email");
+
                 String storedPassword = rs.getString("password");
 
                 if (storedPassword.equals(password)) {
-                    return true;
+                    Student student = new Student(
+                            studentId,
+                            studentName,
+                            studentEmail,
+                            storedPassword
+                    );
+                    return student;
                 }
-                return false;
+                return null;
             }
-            return false;
+            return null;
 
         } catch (SQLException e) {
             e.printStackTrace();
-            return false;
+            return null;
         }
     }
 }
