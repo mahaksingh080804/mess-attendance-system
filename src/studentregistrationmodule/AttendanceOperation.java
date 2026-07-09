@@ -4,15 +4,45 @@ import java.sql.*;
 
 public class AttendanceOperation {
 
-    public void markAttendance(Attendance attendance){
+    public boolean markAttendance(Attendance attendance, int mealChoice){
         int studentId= attendance.getStudentId();
         Date date= attendance.getDate();
 
         if(attendanceExists(studentId,date)){
-            updateAttendance(attendance);
+
+            Attendance existingAttendance = getTodayAttendance(studentId, date);
+
+            if (existingAttendance == null) {
+                System.out.println("Attendance record not found.");
+                return false;
+            }
+
+            switch (mealChoice){
+
+                case 1:
+                    existingAttendance.setBreakfast(true);
+                    break;
+
+                case 2:
+                    existingAttendance.setLunch(true);
+                    break;
+
+                case 3:
+                    existingAttendance.setDinner(true);
+                    break;
+
+                default:
+                    System.out.println("Invalid choice");
+                    return false;
+            }
+
+            return updateAttendance(existingAttendance) == 1;
+
         }
         else {
-            insertAttendance(attendance);
+
+            return insertAttendance(attendance) == 1;
+
         }
     }
 
@@ -36,6 +66,47 @@ public class AttendanceOperation {
         catch(SQLException e) {
             e.printStackTrace();
             return false;
+        }
+    }
+
+    private Attendance getTodayAttendance(int studentId, Date date){
+        String sql="SELECT attendance_id, student_id, date, breakfast, lunch, dinner " +
+                   "FROM attendance WHERE student_id = ? AND date = ?";
+
+        try(Connection con= DriverManager.getConnection(
+                "jdbc:mysql://localhost:3306/mess_food_waste_predictor",
+                "root",
+                "password"
+        );
+            PreparedStatement ps=con.prepareStatement(sql);
+        ){
+            ps.setInt(1,studentId);
+            ps.setDate(2,date);
+
+            ResultSet rs =ps.executeQuery();
+
+            if(rs.next()){
+                int attendanceId = rs.getInt("attendance_id");
+                int dbStudentId = rs.getInt("student_id");
+                Date dbDate = rs.getDate("date");
+                boolean breakfast = rs.getBoolean("breakfast");
+                boolean lunch = rs.getBoolean("lunch");
+                boolean dinner = rs.getBoolean("dinner");
+                return new Attendance(
+                        attendanceId,
+                        dbStudentId,
+                        dbDate,
+                        breakfast,
+                        lunch,
+                        dinner
+                );
+            }
+
+            return null;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
         }
     }
 
