@@ -8,11 +8,7 @@ public class StudentOperation {
         String sql=
                 "SELECT * FROM Student WHERE email=?";
         try(
-                Connection con=DriverManager.getConnection(
-                        "jdbc:mysql://localhost:3306/mess_food_waste_predictor",
-                        "root",
-                        "password"
-                );
+                Connection con = DBConnection.getConnection();
                 PreparedStatement ps=con.prepareStatement(sql);
                 ){
             ps.setString(1,email);
@@ -22,7 +18,7 @@ public class StudentOperation {
             }
                 return false;
 
-        }catch (Exception e){
+        }catch (SQLException e){
             e.printStackTrace();
             return false;
         }
@@ -32,11 +28,7 @@ public class StudentOperation {
         String sql =
                 "INSERT INTO Student(student_name,email,password) VALUES(?,?,?)";
         try (
-                Connection con = DriverManager.getConnection(
-                        "jdbc:mysql://localhost:3306/mess_food_waste_predictor",
-                        "root",
-                        "password"
-                );
+                Connection con = DBConnection.getConnection();
                 PreparedStatement ps = con.prepareStatement(sql);
 
         ) {
@@ -48,7 +40,7 @@ public class StudentOperation {
 
             return rows;
 
-        } catch (Exception e) {
+        } catch (SQLException e) {
             e.printStackTrace();
             return 0;
         }
@@ -60,11 +52,7 @@ public class StudentOperation {
                 "SELECT student_id, student_name, email, password FROM Student WHERE email = ?";
 
         try (
-                Connection con = DriverManager.getConnection(
-                        "jdbc:mysql://localhost:3306/mess_food_waste_predictor",
-                        "root",
-                        "password"
-                );
+                Connection con = DBConnection.getConnection();
                 PreparedStatement ps = con.prepareStatement(sql);
         ) {
             ps.setString(1, email);

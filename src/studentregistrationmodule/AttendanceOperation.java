@@ -49,12 +49,9 @@ public class AttendanceOperation {
     private boolean attendanceExists(int studentId,Date date){
             String sql="SELECT 1 FROM Attendance WHERE student_id= ? AND date= ?";
 
-            try(Connection con= DriverManager.getConnection(
-                    "jdbc:mysql://localhost:3306/mess_food_waste_predictor",
-                    "root",
-                    "password"
-            );
-                PreparedStatement ps=con.prepareStatement(sql);
+            try(
+                    Connection con = DBConnection.getConnection();
+                    PreparedStatement ps=con.prepareStatement(sql);
             ){
                 ps.setInt(1,studentId);
                 ps.setDate(2,date);
@@ -73,12 +70,9 @@ public class AttendanceOperation {
         String sql="SELECT attendance_id, student_id, date, breakfast, lunch, dinner " +
                    "FROM attendance WHERE student_id = ? AND date = ?";
 
-        try(Connection con= DriverManager.getConnection(
-                "jdbc:mysql://localhost:3306/mess_food_waste_predictor",
-                "root",
-                "password"
-        );
-            PreparedStatement ps=con.prepareStatement(sql);
+        try(
+                Connection con = DBConnection.getConnection();
+                PreparedStatement ps=con.prepareStatement(sql);
         ){
             ps.setInt(1,studentId);
             ps.setDate(2,date);
@@ -112,12 +106,9 @@ public class AttendanceOperation {
 
     private int updateAttendance(Attendance attendance){
         String sql="UPDATE Attendance SET breakfast= ?,lunch= ?,dinner= ? WHERE student_id= ? AND date= ?";
-        try(Connection con= DriverManager.getConnection(
-                "jdbc:mysql://localhost:3306/mess_food_waste_predictor",
-                "root",
-                "password"
-        );
-            PreparedStatement ps=con.prepareStatement(sql);
+        try(
+                Connection con = DBConnection.getConnection();
+                PreparedStatement ps=con.prepareStatement(sql);
             ){
             ps.setBoolean(1,attendance.getBreakfast());
             ps.setBoolean(2,attendance.getLunch());
@@ -135,12 +126,9 @@ public class AttendanceOperation {
 
     private int insertAttendance(Attendance attendance){
         String sql="INSERT INTO Attendance(student_id,date,breakfast,lunch,dinner) VALUES(?,?,?,?,?)";
-        try(Connection con= DriverManager.getConnection(
-                "jdbc:mysql://localhost:3306/mess_food_waste_predictor",
-                "root",
-                "password"
-        );
-            PreparedStatement ps=con.prepareStatement(sql);
+        try(
+                Connection con = DBConnection.getConnection();
+                PreparedStatement ps=con.prepareStatement(sql);
         ){
             ps.setInt(1,attendance.getStudentId());
             ps.setDate(2,attendance.getDate());
