@@ -20,15 +20,34 @@ public class AttendanceOperation {
             switch (mealChoice){
 
                 case 1:
+
+                    if(existingAttendance.getBreakfast()){
+                        System.out.println("Breakfast already marked.");
+                        return false;
+                    }
+
                     existingAttendance.setBreakfast(true);
+
                     break;
 
                 case 2:
+
+                    if(existingAttendance.getLunch()){
+                        System.out.println("Lunch already marked.");
+                        return false;
+                    }
                     existingAttendance.setLunch(true);
+
                     break;
 
                 case 3:
+
+                    if(existingAttendance.getDinner()){
+                        System.out.println("Dinner already marked.");
+                        return false;
+                    }
                     existingAttendance.setDinner(true);
+
                     break;
 
                 default:

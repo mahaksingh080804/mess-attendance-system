@@ -19,7 +19,7 @@ public class Main {
             System.out.println("1. Register ");
             System.out.println("2. Login ");
             System.out.println("3. Exit ");
-            System.out.println("Enter your choice :");
+            System.out.print("Enter your choice :");
 
             choice = sc.nextInt();
             sc.nextLine();
