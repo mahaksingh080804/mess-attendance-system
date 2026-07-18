@@ -2,6 +2,7 @@ package studentregistrationmodule;
 
 import java.util.Scanner;
 import java.sql.Date;
+import java.util.ArrayList;
 
 public class Main {
 
@@ -90,8 +91,9 @@ public class Main {
                         do {
 
                             System.out.println("\n===== Student Menu =====");
-                            System.out.println("1.Mark Attendance");
-                            System.out.println("2.Logout");
+                            System.out.println("1. Mark Attendance");
+                            System.out.println("2. View Attendance History");
+                            System.out.println("3. Logout");
                             System.out.print("Enter your choice: ");
 
                             studentChoice = sc.nextInt();
@@ -130,14 +132,59 @@ public class Main {
 
                                     break;
 
+
                                 case 2:
+                                    ArrayList<Attendance> attendanceList =
+                                            attendanceOperation.getAttendanceHistory(loggedInStudent);
+
+                                    if (attendanceList.isEmpty()) {
+
+                                        System.out.println("No attendance history found.");
+
+                                    }
+                                    else {
+
+                                        System.out.println("\n===== Attendance History =====");
+
+                                        for (Attendance attendanceRecord : attendanceList) {
+
+                                            System.out.println("------------------------------");
+
+                                            System.out.println("Date          : " + attendanceRecord.getDate());
+
+                                            if (attendanceRecord.getBreakfast()) {
+                                                System.out.println("Breakfast : Present");
+                                            } else {
+                                                System.out.println("Breakfast : Absent");
+                                            }
+
+                                            if (attendanceRecord.getLunch()) {
+                                                System.out.println("Lunch : Present");
+                                            } else {
+                                                System.out.println("Lunch : Absent");
+                                            }
+
+                                            if (attendanceRecord.getDinner()) {
+                                                System.out.println("Dinner : Present");
+                                            } else {
+                                                System.out.println("Dinner : Absent");
+                                            }
+
+                                            System.out.println("------------------------------");
+                                            System.out.println();
+                                        }
+                                    }
+
+                                    break;
+
+                                case 3:
                                     System.out.println("Logged out successfully.");
                                     break;
 
                                 default:
                                     System.out.println("Invalid Choice");
                             }
-                        }while (studentChoice != 2);
+                        }while (studentChoice != 3);
                     }
                     else {
                         System.out.println("Invalid Email or Password.");

@@ -1,8 +1,10 @@
 package studentregistrationmodule;
 
 import java.sql.*;
+import java.util.ArrayList;
 
 public class AttendanceOperation {
+
 
     public boolean markAttendance(Attendance attendance, int mealChoice){
         int studentId= attendance.getStudentId();
@@ -65,6 +67,7 @@ public class AttendanceOperation {
         }
     }
 
+
     private boolean attendanceExists(int studentId,Date date){
             String sql="SELECT 1 FROM Attendance WHERE student_id= ? AND date= ?";
 
@@ -84,6 +87,7 @@ public class AttendanceOperation {
             return false;
         }
     }
+
 
     private Attendance getTodayAttendance(int studentId, Date date){
         String sql="SELECT attendance_id, student_id, date, breakfast, lunch, dinner " +
@@ -123,6 +127,7 @@ public class AttendanceOperation {
         }
     }
 
+
     private int updateAttendance(Attendance attendance){
         String sql="UPDATE Attendance SET breakfast= ?,lunch= ?,dinner= ? WHERE student_id= ? AND date= ?";
         try(
@@ -143,6 +148,7 @@ public class AttendanceOperation {
         }
     }
 
+
     private int insertAttendance(Attendance attendance){
         String sql="INSERT INTO Attendance(student_id,date,breakfast,lunch,dinner) VALUES(?,?,?,?,?)";
         try(
@@ -161,6 +167,48 @@ public class AttendanceOperation {
             e.printStackTrace();
             return 0;
         }
+    }
+
+    public ArrayList<Attendance> getAttendanceHistory(Student student){
+
+        ArrayList<Attendance> attendanceList= new ArrayList<>();
+
+        String sql="SELECT * FROM Attendance WHERE student_id= ? ORDER BY date DESC ";
+
+        try(
+                Connection con = DBConnection.getConnection();
+                PreparedStatement ps=con.prepareStatement(sql);
+        ){
+
+            ps.setInt(1,student.getStudentId());
+
+            ResultSet rs =ps.executeQuery();
+
+            while(rs.next()) {
+
+                int attendanceId = rs.getInt("attendance_id");
+                int dbStudentId = rs.getInt("student_id");
+                Date dbDate = rs.getDate("date");
+                boolean breakfast = rs.getBoolean("breakfast");
+                boolean lunch = rs.getBoolean("lunch");
+                boolean dinner = rs.getBoolean("dinner");
+
+                Attendance attendance = new Attendance(
+                        attendanceId,
+                        dbStudentId,
+                        dbDate,
+                        breakfast,
+                        lunch,
+                        dinner
+                );
+
+                attendanceList.add(attendance);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return attendanceList;
     }
 
 }
