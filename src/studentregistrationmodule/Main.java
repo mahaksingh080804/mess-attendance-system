@@ -12,6 +12,7 @@ public class Main {
 
         StudentOperation studentOperation = new StudentOperation();
         AttendanceOperation attendanceOperation = new AttendanceOperation();
+        AdminOperation adminOperation = new AdminOperation();
 
         int choice;
 
@@ -19,7 +20,8 @@ public class Main {
             System.out.println("\n=====Food Mess Waste Predictor =====");
             System.out.println("1. Register ");
             System.out.println("2. Login ");
-            System.out.println("3. Exit ");
+            System.out.println("3. Admin Login ");
+            System.out.println("4. Exit ");
             System.out.print("Enter your choice :");
 
             choice = sc.nextInt();
@@ -191,15 +193,43 @@ public class Main {
                     }
                     break;
 
+
                 case 3:
+
+                    System.out.print("Enter Username: ");
+                    String adminUsername = sc.nextLine();
+
+                    System.out.print("Enter Password: ");
+                    String adminPassword = sc.nextLine();
+
+                    Admin loggedInAdmin =
+                            adminOperation.login(adminUsername, adminPassword);
+
+                    if (loggedInAdmin != null) {
+
+                        System.out.println("Admin Login Successful");
+
+                    }
+                    else {
+
+                        System.out.println("Invalid Username or Password");
+
+                    }
+
+                    break;
+
+
+                case 4:
+
                     System.out.println("Thank you for using Mess Food Waste Predictor.");
                     break;
 
                 default:
+
                     System.out.println("Invalid Choice.");
 
             }
-        }while (choice != 3);
+        }while (choice != 4);
 
         sc.close();
     }
