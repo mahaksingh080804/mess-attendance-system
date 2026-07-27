@@ -81,116 +81,22 @@ public class Main {
                         break;
                     }
 
-                    Student loggedInStudent = studentOperation.login(loginEmail,loginPassword);
+                    Student loggedInStudent =
+                            studentOperation.login(loginEmail, loginPassword);
 
                     if (loggedInStudent != null) {
 
                         System.out.println("Login Successful.");
                         System.out.println("Welcome " + loggedInStudent.getStudentName());
 
-                        int studentChoice;
+                        showStudentMenu(loggedInStudent, sc, attendanceOperation);
 
-                        do {
+                    } else {
 
-                            System.out.println("\n===== Student Menu =====");
-                            System.out.println("1. Mark Attendance");
-                            System.out.println("2. View Attendance History");
-                            System.out.println("3. Logout");
-                            System.out.print("Enter your choice: ");
-
-                            studentChoice = sc.nextInt();
-
-                            switch (studentChoice) {
-
-                                case 1:
-                                    System.out.println("\n=====Mark Attendance====");
-                                    System.out.println("1.Breakfast");
-                                    System.out.println("2.Lunch");
-                                    System.out.println("3.Dinner");
-                                    System.out.print("Enter your choice:");
-
-                                    int mealChoice = sc.nextInt();
-
-                                    if (mealChoice < 1 || mealChoice > 3) {
-                                        System.out.println("Invalid meal choice.");
-                                        break;
-                                    }
-
-                                    Date today = new Date(System.currentTimeMillis());
-
-                                    boolean breakfast = (mealChoice == 1);
-                                    boolean lunch = (mealChoice == 2);
-                                    boolean dinner = (mealChoice == 3);
-
-                                    Attendance attendance = new Attendance(loggedInStudent.getStudentId(),today, breakfast, lunch, dinner);
-
-                                    boolean success = attendanceOperation.markAttendance(attendance, mealChoice);
-
-                                    if (success) {
-                                        System.out.println("Attendance marked successfully.");
-                                    } else {
-                                        System.out.println("Failed to mark attendance.");
-                                    }
-
-                                    break;
-
-
-                                case 2:
-                                    ArrayList<Attendance> attendanceList =
-                                            attendanceOperation.getAttendanceHistory(loggedInStudent);
-
-                                    if (attendanceList.isEmpty()) {
-
-                                        System.out.println("No attendance history found.");
-
-                                    }
-                                    else {
-
-                                        System.out.println("\n===== Attendance History =====");
-
-                                        for (Attendance attendanceRecord : attendanceList) {
-
-                                            System.out.println("------------------------------");
-
-                                            System.out.println("Date          : " + attendanceRecord.getDate());
-
-                                            if (attendanceRecord.getBreakfast()) {
-                                                System.out.println("Breakfast : Present");
-                                            } else {
-                                                System.out.println("Breakfast : Absent");
-                                            }
-
-                                            if (attendanceRecord.getLunch()) {
-                                                System.out.println("Lunch : Present");
-                                            } else {
-                                                System.out.println("Lunch : Absent");
-                                            }
-
-                                            if (attendanceRecord.getDinner()) {
-                                                System.out.println("Dinner : Present");
-                                            } else {
-                                                System.out.println("Dinner : Absent");
-                                            }
-
-                                            System.out.println("------------------------------");
-                                            System.out.println();
-                                        }
-                                    }
-
-                                    break;
-
-                                case 3:
-                                    System.out.println("Logged out successfully.");
-                                    break;
-
-                                default:
-                                    System.out.println("Invalid Choice");
-                            }
-                        }while (studentChoice != 3);
-                    }
-                    else {
                         System.out.println("Invalid Email or Password.");
+
                     }
+
                     break;
 
 
@@ -233,4 +139,121 @@ public class Main {
 
         sc.close();
     }
+
+
+    private static void showStudentMenu(Student loggedInStudent, Scanner sc, AttendanceOperation attendanceOperation) {
+
+        int studentChoice;
+
+
+        do {
+
+            System.out.println("\n===== Student Menu =====");
+            System.out.println("1. Mark Attendance");
+            System.out.println("2. View Attendance History");
+            System.out.println("3. Logout");
+            System.out.print("Enter your choice: ");
+
+            studentChoice = sc.nextInt();
+            sc.nextLine();
+
+            switch (studentChoice) {
+
+                case 1:
+
+                    System.out.println("\n=====Mark Attendance====");
+                    System.out.println("1.Breakfast");
+                    System.out.println("2.Lunch");
+                    System.out.println("3.Dinner");
+                    System.out.print("Enter your choice:");
+
+                    int mealChoice = sc.nextInt();
+                    sc.nextLine();
+
+                    if (mealChoice < 1 || mealChoice > 3) {
+                        System.out.println("Invalid meal choice.");
+                        break;
+                    }
+
+                    Date today = new Date(System.currentTimeMillis());
+
+                    boolean breakfast = (mealChoice == 1);
+                    boolean lunch = (mealChoice == 2);
+                    boolean dinner = (mealChoice == 3);
+
+                    Attendance attendance = new Attendance(
+                            loggedInStudent.getStudentId(),
+                            today,
+                            breakfast,
+                            lunch,
+                            dinner);
+
+                    boolean success =
+                            attendanceOperation.markAttendance(attendance, mealChoice);
+
+                    if (success) {
+                        System.out.println("Attendance marked successfully.");
+                    } else {
+                        System.out.println("Failed to mark attendance.");
+                    }
+
+                    break;
+
+                case 2:
+
+                    ArrayList<Attendance> attendanceList =
+                            attendanceOperation.getAttendanceHistory(loggedInStudent);
+
+                    if (attendanceList.isEmpty()) {
+
+                        System.out.println("No attendance history found.");
+
+                    } else {
+
+                        System.out.println("\n===== Attendance History =====");
+
+                        for (Attendance attendanceRecord : attendanceList) {
+
+                            System.out.println("------------------------------");
+                            System.out.println("Date          : " + attendanceRecord.getDate());
+
+                            if (attendanceRecord.getBreakfast()) {
+                                System.out.println("Breakfast : Present");
+                            } else {
+                                System.out.println("Breakfast : Absent");
+                            }
+
+                            if (attendanceRecord.getLunch()) {
+                                System.out.println("Lunch : Present");
+                            } else {
+                                System.out.println("Lunch : Absent");
+                            }
+
+                            if (attendanceRecord.getDinner()) {
+                                System.out.println("Dinner : Present");
+                            } else {
+                                System.out.println("Dinner : Absent");
+                            }
+
+                            System.out.println("------------------------------");
+                            System.out.println();
+                        }
+                    }
+
+                    break;
+
+                case 3:
+
+                    System.out.println("Logged out successfully.");
+
+                    break;
+
+                default:
+
+                    System.out.println("Invalid Choice");
+            }
+
+        } while (studentChoice != 3);
+    }
+
 }
