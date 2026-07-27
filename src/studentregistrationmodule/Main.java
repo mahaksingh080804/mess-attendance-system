@@ -19,7 +19,7 @@ public class Main {
         do {
             System.out.println("\n=====Food Mess Waste Predictor =====");
             System.out.println("1. Register ");
-            System.out.println("2. Login ");
+            System.out.println("2. Student Login ");
             System.out.println("3. Admin Login ");
             System.out.println("4. Exit ");
             System.out.print("Enter your choice :");
@@ -114,6 +114,10 @@ public class Main {
                     if (loggedInAdmin != null) {
 
                         System.out.println("Admin Login Successful");
+
+                        showAdminDashboard(loggedInAdmin,
+                                sc,
+                                adminOperation);
 
                     }
                     else {
@@ -255,5 +259,84 @@ public class Main {
 
         } while (studentChoice != 3);
     }
+
+
+    private static void showAdminDashboard(Admin loggedInAdmin, Scanner sc, AdminOperation adminOperation) {
+
+        int adminChoice;
+
+        do {
+
+            System.out.println("\n===== Admin Dashboard =====");
+            System.out.println("Welcome, " + loggedInAdmin.getUsername());
+            System.out.println("1. View Students");
+            System.out.println("2. Meal Count");
+            System.out.println("3. Reports");
+            System.out.println("4. Food Estimation");
+            System.out.println("5. Logout");
+            System.out.print("Enter your choice: ");
+
+            adminChoice = sc.nextInt();
+            sc.nextLine();
+
+            switch (adminChoice) {
+
+                case 1:
+
+                    ArrayList<Student> studentList =
+                            adminOperation.viewStudents();
+
+                    if (studentList.isEmpty()) {
+
+                        System.out.println("No students found.");
+
+                    }
+                    else {
+
+                        System.out.println("\n===== Registered Students =====");
+
+                        for (Student student : studentList) {
+
+                            System.out.println("---------------------------");
+                            System.out.println("Student ID   : " + student.getStudentId());
+                            System.out.println("Student Name : " + student.getStudentName());
+                            System.out.println("Email        : " + student.getEmail());
+                            System.out.println("---------------------------");
+                            System.out.println();
+
+                        }
+                    }
+                    break;
+
+                case 2:
+
+                    System.out.println("Feature coming soon.");
+                    break;
+
+                case 3:
+
+                    System.out.println("Feature coming soon.");
+                    break;
+
+                case 4:
+
+                    System.out.println("Feature coming soon.");
+                    break;
+
+                case 5:
+
+                    System.out.println("Logged out Successfully.");
+                    break;
+
+                default:
+
+                    System.out.println("Invalid Choice.");
+            }
+
+        } while (adminChoice != 5);
+
+
+    }
+
 
 }
