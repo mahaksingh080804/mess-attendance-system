@@ -3,6 +3,7 @@ package studentregistrationmodule;
 import java.util.Scanner;
 import java.sql.Date;
 import java.util.ArrayList;
+import java.sql.SQLException;
 
 public class Main {
 
@@ -310,7 +311,44 @@ public class Main {
 
                 case 2:
 
-                    System.out.println("Feature coming soon.");
+                    System.out.println("--- Meal Count ---");
+                    System.out.println("1. Breakfast");
+                    System.out.println("2. Lunch");
+                    System.out.println("3. Dinner");
+
+                    int mealChoice = sc.nextInt();
+
+                    String meal;
+
+                    if (mealChoice == 1) {
+
+                        meal = "breakfast";
+
+                    } else if (mealChoice == 2) {
+
+                        meal = "lunch";
+
+                    } else if (mealChoice == 3) {
+
+                        meal = "dinner";
+
+                    } else {
+
+                        System.out.println("Invalid meal choice.");
+                        break;
+
+                    }
+
+                    try {
+
+                        int count = adminOperation.getMealCount(meal);
+                        System.out.println(meal + " count for today: " + count);
+
+                    } catch (SQLException e) {
+
+                        System.out.println("Unable to retrieve meal count.");
+                    }
+
                     break;
 
                 case 3:

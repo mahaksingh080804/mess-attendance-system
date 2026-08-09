@@ -94,12 +94,15 @@ public class AdminOperation {
         String mealColumn;
 
         if (meal.equals("breakfast")) {
+
             mealColumn = "breakfast";
 
         } else if (meal.equals("lunch")) {
+
             mealColumn = "lunch";
 
         } else {
+
             mealColumn = "dinner";
         }
 
@@ -116,6 +119,5 @@ public class AdminOperation {
             rs.next();
             return rs.getInt(1);
         }
-
     }
 }
