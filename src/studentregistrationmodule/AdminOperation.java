@@ -82,4 +82,40 @@ public class AdminOperation {
         return studentList;
     }
 
+
+    public int getMealCount(String meal) throws SQLException {
+
+        if (!meal.equals("breakfast") && !meal.equals("lunch") && !meal.equals("dinner")) {
+
+            return -1;
+
+        }
+
+        String mealColumn;
+
+        if (meal.equals("breakfast")) {
+            mealColumn = "breakfast";
+
+        } else if (meal.equals("lunch")) {
+            mealColumn = "lunch";
+
+        } else {
+            mealColumn = "dinner";
+        }
+
+        String sql =
+                "SELECT COUNT(*) FROM Attendance WHERE date = CURDATE() AND "
+                        + mealColumn + " = true";
+
+        try (
+                Connection con = DBConnection.getConnection();
+                PreparedStatement ps = con.prepareStatement(sql);
+                ResultSet rs = ps.executeQuery()
+        ) {
+
+            rs.next();
+            return rs.getInt(1);
+        }
+
+    }
 }
