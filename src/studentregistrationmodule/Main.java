@@ -4,6 +4,7 @@ import java.util.Scanner;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.sql.SQLException;
+import java.time.LocalDate;
 
 public class Main {
 
@@ -14,6 +15,7 @@ public class Main {
         StudentOperation studentOperation = new StudentOperation();
         AttendanceOperation attendanceOperation = new AttendanceOperation();
         AdminOperation adminOperation = new AdminOperation();
+        ReportOperation reportOperation = new ReportOperation();
 
         int choice;
 
@@ -118,7 +120,8 @@ public class Main {
 
                         showAdminDashboard(loggedInAdmin,
                                 sc,
-                                adminOperation);
+                                adminOperation,
+                                reportOperation);
 
                     }
                     else {
@@ -262,7 +265,8 @@ public class Main {
     }
 
 
-    private static void showAdminDashboard(Admin loggedInAdmin, Scanner sc, AdminOperation adminOperation) {
+    private static void showAdminDashboard(Admin loggedInAdmin, Scanner sc, AdminOperation adminOperation,
+                                           ReportOperation reportOperation) {
 
         int adminChoice;
 
@@ -353,7 +357,47 @@ public class Main {
 
                 case 3:
 
-                    System.out.println("Feature coming soon.");
+                    System.out.println("\n===== Reports =====");
+
+                    System.out.print("Enter start date (YYYY-MM-DD): ");
+                    LocalDate startDate = LocalDate.parse(sc.nextLine());
+
+                    System.out.print("Enter end date (YYYY-MM-DD): ");
+                    LocalDate endDate = LocalDate.parse(sc.nextLine());
+
+                    if (startDate.isAfter(endDate)) {
+                        System.out.println("Start date cannot be after end date.");
+                        break;
+                    }
+
+                    try {
+
+                        ArrayList<DailyMealReport> reports =
+                                reportOperation.getReport(startDate, endDate);
+
+                        if (reports.isEmpty()) {
+
+                            System.out.println("No attendance records found for this date range.");
+
+                        } else {
+
+                            for (DailyMealReport report : reports) {
+
+                                System.out.println("----------------------------");
+                                System.out.println("Date      : " + report.getDate());
+                                System.out.println("Breakfast : " + report.getBreakfastCount());
+                                System.out.println("Lunch     : " + report.getLunchCount());
+                                System.out.println("Dinner    : " + report.getDinnerCount());
+                                System.out.println("----------------------------");
+                            }
+                        }
+
+                    } catch (SQLException e) {
+
+                        System.out.println("Unable to retrieve report.");
+
+                    }
+
                     break;
 
                 case 4:
@@ -375,6 +419,5 @@ public class Main {
 
 
     }
-
 
 }
